@@ -65,7 +65,7 @@ steps:
 - bash: |
     cd src
     export ELECTRON_OUT_DIR=Default
-    set npm_config_arch=arm64
+    export npm_config_arch=arm64
     (cd electron && node script/yarn test -- --enable-logging)
   displayName: 'Run Electron tests'
   timeoutInMinutes: 20
