@@ -799,8 +799,13 @@ step-maybe-trigger-arm-test: &step-maybe-trigger-arm-test
       if [ "$TRIGGER_ARM_TEST" == "true" ] && [ -z "$CIRCLE_PR_NUMBER" ]; then
         #Trigger VSTS job, passing along CircleCI job number and branch to build
         if [ "`uname`" == "Darwin" ]; then
-          echo "Triggering electron-arm2-testing build on Azure DevOps"  
-          node electron/script/release/ci-release-build.js --job=electron-arm2-testing --ci=DevOps --armTest --circleBuildNum=$CIRCLE_BUILD_NUM $CIRCLE_BRANCH
+          if [ x"$MAS_BUILD" == x"true" ]; then
+            export DEVOPS_BUILD="electron-arm2-mas-testing"
+          else
+            export DEVOPS_BUILD="electron-arm2-testing"
+          fi
+          echo "Triggering $DEVOPS_BUILD build on Azure DevOps"
+          node electron/script/release/ci-release-build.js --job=$DEVOPS_BUILD --ci=DevOps --armTest --circleBuildNum=$CIRCLE_BUILD_NUM $CIRCLE_BRANCH
         else
           echo "Triggering electron-$TARGET_ARCH-testing build on VSTS"  
           node electron/script/release/ci-release-build.js --job=electron-$TARGET_ARCH-testing --ci=VSTS --armTest --circleBuildNum=$CIRCLE_BUILD_NUM $CIRCLE_BRANCH
@@ -2201,6 +2206,7 @@ jobs:
       <<: *env-ninja-status
       <<: *env-macos-build
       <<: *env-mas-apple-silicon
+      TRIGGER_ARM_TEST: true
       GCLIENT_EXTRA_ARGS: '--custom-var=checkout_mac=True --custom-var=host_os=mac'
     steps:
       - electron-build:
