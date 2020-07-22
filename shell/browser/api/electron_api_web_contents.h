@@ -50,7 +50,7 @@ class ScriptExecutor;
 #endif
 
 namespace blink {
-struct WebDeviceEmulationParams;
+struct DeviceEmulationParams;
 }
 
 namespace gin_helper {
@@ -223,7 +223,7 @@ class WebContents : public gin_helper::TrackableObject<WebContents>,
   bool IsDevToolsOpened();
   bool IsDevToolsFocused();
   void ToggleDevTools();
-  void EnableDeviceEmulation(const blink::WebDeviceEmulationParams& params);
+  void EnableDeviceEmulation(const blink::DeviceEmulationParams& params);
   void DisableDeviceEmulation();
   void InspectElement(int x, int y);
   void InspectSharedWorker();
